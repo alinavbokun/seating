@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="ru"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Рассадка — Максим и Алина</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&amp;family=Nunito:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<script id="state" type="application/json">
+{"tables":[{"name":"Стол 1","guests":["Вячеслав Казимирович (отец невесты)","Светлана Петровна (мать невесты)","Светлана Аркадьевна (мать жениха)","Алексей Олегович (отец жениха)","Виолетта Алексеевна (сестра жениха)","Людмила Михайловна (бабушка жениха)","Владимир Яковлевич (дедушка жениха)","Галина Михайловна (бабушка невесты)"]},{"name":"Стол 2","guests":["Олег Викторович","Зоя Петровна","Юлия Турчина","Анастасия Олеговна","Сергей Анатольевич","Маргарита Сергеевна","Владислав Аркадьевич","Татьяна Михайловна","Артемий Владиславович"]},{"name":"Стол 3","guests":["Наталья Михайловна","Дмитрий Николаевич","Елена Петровна","Людмила Станиславовна","Александр Николаевич","Александр Алексеевич","Оксана Александровна","Арина Александровна"]},{"name":"Стол 4","guests":["Иван Владиславович","Кирилл Владиславович","Наталья Александровна","Алиса Алексеевна","Илья Денисович Бобовников","Сахарок","Андрей Германович","Анастасия Викторовна","Никита Александрович"]},{"name":"Стол 5","guests":["Екатерина Геннадьевна","Евгений Олегович","Виталий Олегович","Анастасия Дмитриевна","Глеб Петрович","Ульяна +","Спутник Ромы","Татьяна Александровна","Евгений Юрьевич"]},{"name":"Стол 6","guests":["Нина Георгиевна","Людмила Викторовна","Валентина Юрьевна","Андрей Александрович","Дарья Владимировна","Алёна Владимировна","Евгений Владимирович","Катерина Александровна","Варвара Евгеньевна"]}],"unseated":[]}
+</script>
+<style id="css">
+:root{
+  --paper:#fbfcff; --grid:#dbe4f3; --ink:#2a3f9e; --ink-soft:#6b7bbf; --margin:#e3a0a7;
+  --text:#1d2340; --muted:#6a7090; --chip:#ffffff; --pool:#fff6f7; --ok:#2e7d4f;
+  --hand:'Caveat','Segoe Print','Comic Sans MS',cursive;
+  --ui:'Nunito',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#161a2b; --grid:#232a44; --ink:#9fb2ff; --ink-soft:#7a88c9; --margin:#7a3d48;
+  --text:#e6e9f7; --muted:#9aa1c2; --chip:#1f2540; --pool:#2a1f2a;}}
+:root[data-theme="dark"]{--paper:#161a2b; --grid:#232a44; --ink:#9fb2ff; --ink-soft:#7a88c9; --margin:#7a3d48;
+  --text:#e6e9f7; --muted:#9aa1c2; --chip:#1f2540; --pool:#2a1f2a;}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background-color:var(--paper);color:var(--text);font-family:var(--ui);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:22px 22px;min-height:100vh}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--paper) 92%,transparent);
+  backdrop-filter:blur(4px);border-bottom:2px solid var(--margin);padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+h1{font-family:var(--hand);font-weight:700;color:var(--ink);font-size:2.2rem;margin:0;line-height:1}
+.stats{color:var(--muted);font-size:.9rem}
+.spacer{flex:1}
+button{font:inherit;font-weight:600;border:1.5px solid var(--ink);color:var(--ink);background:transparent;border-radius:8px;padding:6px 12px;cursor:pointer}
+button.primary{background:var(--ink);color:var(--paper)}
+button:disabled{opacity:.45;cursor:default}
+button:focus-visible,.chip:focus-visible,input:focus-visible{outline:3px solid var(--margin);outline-offset:2px}
+.status{font-size:.85rem;color:var(--muted);min-width:8ch}
+.status.dirty{color:#c0392b}.status.ok{color:var(--ok)}
+main{padding:16px;max-width:1200px;margin:0 auto}
+.head{margin:4px auto 18px;text-align:center}
+.head .couple{display:inline-block;font-family:var(--hand);font-size:1.9rem;color:var(--ink);border:2px solid var(--ink);border-radius:14px;padding:4px 26px;background:var(--paper)}
+.hint{color:var(--muted);font-size:.85rem;text-align:center;margin:0 0 14px}
+.pool{background:var(--pool);border:2px dashed var(--margin);border-radius:12px;padding:10px 12px;margin-bottom:22px}
+.pool h2{font-family:var(--hand);font-size:1.5rem;color:var(--ink);margin:0 0 6px;font-weight:700}
+.pool .list{display:flex;flex-wrap:wrap;gap:8px;min-height:40px;align-items:center}
+.pool .empty{color:var(--muted);font-size:.9rem}
+.add{display:flex;gap:8px;margin-top:8px}
+.add input{flex:1;min-width:0;font:inherit;padding:6px 10px;border:1.5px solid var(--ink-soft);border-radius:8px;background:var(--paper);color:var(--text)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 4%}
+.tablewrap{position:relative;width:100%;aspect-ratio:420/250;border-radius:16px;transition:background .15s}
+.tablewrap.over,.pool.over{background:color-mix(in srgb,var(--ink) 10%,transparent)}
+.stage{position:absolute;left:0;top:0;width:420px;height:250px;transform-origin:0 0}
+.circle{position:absolute;top:20px;width:210px;height:210px;border:2px solid var(--ink);border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--paper)}
+.circle .tname{font-family:var(--hand);font-size:1.6rem;font-weight:700;color:var(--ink);line-height:1;background:none;border:0;padding:0}
+.circle .cnt{font-size:.8rem;color:var(--muted)}
+.seat{position:absolute;width:9px;height:9px;border-radius:50%;background:var(--ink);transform:translate(-50%,-50%)}
+.chip{position:absolute;font-family:var(--hand);font-size:1.2rem;line-height:1.1;color:var(--ink);white-space:nowrap;cursor:grab;
+  padding:1px 6px;border-radius:6px;user-select:none;-webkit-user-select:none;touch-action:none;background:transparent}
+.chip:hover{background:color-mix(in srgb,var(--ink) 8%,transparent)}
+.pool .chip{position:static;background:var(--chip);border:1.5px solid var(--ink-soft)}
+.ghost{position:fixed;z-index:100;pointer-events:none;font-family:var(--hand);font-size:1.35rem;color:var(--paper);background:var(--ink);
+  padding:2px 10px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.25);transform:translate(-50%,-120%)}
+.dragging{opacity:.3}
+.chip input,.tname input{font:inherit;color:inherit;background:var(--paper);border:1.5px solid var(--ink);border-radius:6px;padding:0 4px;min-width:6ch}
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:var(--text);color:var(--paper);border-radius:10px;padding:8px 10px 8px 16px;display:flex;gap:12px;align-items:center}
+.toast button{border-color:var(--paper);color:var(--paper)}
+.insert{position:absolute;height:3px;border-radius:2px;background:var(--margin);pointer-events:none;z-index:5}
+.trash{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:50;display:none;
+  background:#c0392b;color:#fff;border-radius:999px;padding:10px 22px;font-weight:700}
+.trash.show{display:block}.trash.over{transform:translateX(-50%) scale(1.1)}
+.readonly .chip{cursor:default}
+@media (max-width:600px){header{position:static}h1{font-size:1.7rem}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  header .ctrl,.hint,.add,.trash{display:none!important}
+  header{position:static;border:0}
+  body{background:#fff}
+  .grid{grid-template-columns:1fr 1fr}
+  .tablewrap{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Максим и Алина</h1>
+  <span class="stats" id="stats"></span>
+  <span class="spacer"></span>
+  <span class="ctrl status" id="status"></span>
+  <button class="ctrl" id="undo" title="Отменить (Ctrl+Z)" disabled="">↶ Отменить</button>
+  <button class="ctrl" id="redo" title="Повторить (Ctrl+Shift+Z)" disabled="">↷ Повторить</button>
+  <button class="ctrl" id="reset" title="Вернуть последнюю сохранённую версию" disabled="">Сбросить</button>
+  <button class="ctrl" id="addTable">+ стол</button>
+  <button class="ctrl" id="print">Печать</button>
+  <button class="ctrl primary" id="save" disabled="">Сохранить</button>
+</header>
+<main>
+  <div class="head"><span class="couple">Максим ♥ Алина</span></div>
+  <p class="hint">Перетаскивай имена между столами и внутри стола, чтобы поменять порядок. Нажми на имя или название стола, чтобы исправить. Чтобы удалить гостя, перетащи его в корзину внизу.</p>
+  <section class="pool" id="pool" data-target="pool">
+    <h2>Не рассажены</h2>
+    <div class="list" id="poolList"></div>
+    <div class="add ctrl"><input id="newGuest" placeholder="Добавить гостя…" aria-label="Имя нового гостя"><button id="addGuest">Добавить</button></div>
+  </section>
+  <div class="grid" id="grid"></div>
+</main>
+<div class="trash" id="trash">🗑 Удалить</div>
+
+<script id="app">
+const initial = JSON.parse(document.getElementById('state').textContent);
+const DRAFT_KEY = 'seating-draft-v1';
+let state = structuredClone(initial);
+let dirty = false, readOnly = false, artifactApi = null;
+
+try { const d = sessionStorage.getItem(DRAFT_KEY) || localStorage.getItem(DRAFT_KEY);
+  if (d) { const p = JSON.parse(d); if (p && p.base === JSON.stringify(initial)) { state = p.state; dirty = true; } } } catch(e){}
+
+const $ = id => document.getElementById(id);
+const esc = s => s;
+
+function saveDraft(){
+  try { const v = JSON.stringify({base: JSON.stringify(initial), state});
+    localStorage.setItem(DRAFT_KEY, v); sessionStorage.setItem(DRAFT_KEY, v); } catch(e){}
+}
+function clearDraft(){ try{ localStorage.removeItem(DRAFT_KEY); sessionStorage.removeItem(DRAFT_KEY);}catch(e){} }
+
+/* history: every change is a snapshot; kept in sessionStorage so it survives the reload after "Сохранить" */
+const HIST_KEY = 'seating-history-v1';
+let past = [], future = [], present = JSON.stringify(state);
+try { const h = JSON.parse(sessionStorage.getItem(HIST_KEY) || 'null');
+  if (h && h.present === present){ past = h.past || []; future = h.future || []; } } catch(e){}
+// a draft restored from an earlier visit: make the saved version reachable with «Отменить»
+if (!past.length && present !== JSON.stringify(initial)) past = [JSON.stringify(initial)];
+function syncDirty(){ dirty = JSON.stringify(state) !== JSON.stringify(initial); dirty ? saveDraft() : clearDraft(); }
+function saveHist(){ try { sessionStorage.setItem(HIST_KEY, JSON.stringify({past: past.slice(-100), future, present})); } catch(e){} }
+function markDirty(){
+  const now = JSON.stringify(state);
+  if (now !== present){ past.push(present); future = []; present = now; saveHist(); }
+  syncDirty(); renderStatus();
+}
+function undo(){ if (!past.length) return; future.push(present); present = past.pop(); state = JSON.parse(present); saveHist(); syncDirty(); render(); }
+function redo(){ if (!future.length) return; past.push(present); present = future.pop(); state = JSON.parse(present); saveHist(); syncDirty(); render(); }
+function renderStatus(){
+  const s = $('status'), b = $('save');
+  $('reset').disabled = readOnly || !dirty;
+  $('undo').disabled = readOnly || !past.length; $('redo').disabled = readOnly || !future.length;
+  if (readOnly){ s.textContent = 'только просмотр'; s.className='ctrl status'; b.disabled = true; return; }
+  if (dirty){ s.textContent = 'есть несохранённые изменения'; s.className='ctrl status dirty'; b.disabled = false; }
+  else { s.textContent = 'сохранено'; s.className='ctrl status ok'; b.disabled = true; }
+}
+
+const W = 420, CY = 125, R = 105;
+// guests sit on the outer half of the table: left column faces left, right column faces right
+function layout(n, i, left){
+  const cx = left ? W - 10 - R : 10 + R;
+  const dy = n > 1 ? R*0.86*(-1 + 2*i/(n-1)) : 0;
+  const dx = Math.sqrt(R*R - dy*dy);
+  return {cx, px: left ? cx - dx : cx + dx, py: CY + dy};
+}
+function chip(name, where, idx){
+  const el = document.createElement('div');
+  el.className = 'chip'; el.textContent = name; el.tabIndex = 0;
+  el.dataset.where = where; el.dataset.idx = idx;
+  el.addEventListener('pointerdown', startDrag);
+  return el;
+}
+
+function render(){
+  const seated = state.tables.reduce((s,t)=>s+t.guests.length,0);
+  $('stats').textContent = `за столами ${seated}, не рассажены ${state.unseated.length}, всего с вами ${seated + state.unseated.length + 2}`;
+  const pl = $('poolList'); pl.innerHTML = '';
+  if (!state.unseated.length){ const e=document.createElement('span'); e.className='empty'; e.textContent='Все рассажены'; pl.append(e); }
+  state.unseated.forEach((g,i)=>pl.append(chip(g,'pool',i)));
+
+  const grid = $('grid'); grid.innerHTML = '';
+  state.tables.forEach((t,ti)=>{
+    const wrap = document.createElement('div'); wrap.className='tablewrap'; wrap.dataset.target = ti;
+    const stage = document.createElement('div'); stage.className='stage';
+    const c = document.createElement('div'); c.className='circle';
+    const tn = document.createElement('button'); tn.className='tname'; tn.textContent=t.name; tn.title='Нажми, чтобы переименовать';
+    tn.addEventListener('click',()=>renameTable(ti, tn));
+    const cnt = document.createElement('div'); cnt.className='cnt'; cnt.textContent = `${t.guests.length} чел.`;
+    c.append(tn,cnt); stage.append(c);
+    const left = ti % 2 === 0;
+    c.style.left = (layout(1,0,left).cx - R) + 'px';
+    t.guests.forEach((g,gi)=>{
+      const {px,py} = layout(t.guests.length, gi, left);
+      const dot = document.createElement('div'); dot.className='seat'; dot.style.left=px+'px'; dot.style.top=py+'px';
+      const ch = chip(g, ti, gi);
+      ch.style.top = py+'px'; ch.style.transform = 'translateY(-50%)';
+      if (left) ch.style.right = (W-px+8)+'px'; else ch.style.left = (px+8)+'px';
+      stage.append(dot, ch);
+    });
+    wrap.append(stage); grid.append(wrap);
+  });
+  fit(); renderStatus();
+}
+function fit(){ document.querySelectorAll('.tablewrap').forEach(w=>{ w.firstChild.style.transform = `scale(${w.clientWidth/420})`; }); }
+window.addEventListener('resize', fit);
+
+/* drag via pointer events (mouse + touch) */
+let drag = null;
+function startDrag(e){
+  if (readOnly || e.button > 0 || e.target.tagName === 'INPUT') return;
+  const el = e.currentTarget;
+  drag = {el, where: el.dataset.where, idx: +el.dataset.idx, name: el.textContent, x0:e.clientX, y0:e.clientY, moved:false, ghost:null, over:null};
+  el.setPointerCapture(e.pointerId);
+  el.addEventListener('pointermove', moveDrag); el.addEventListener('pointerup', endDrag); el.addEventListener('pointercancel', cancelDrag);
+}
+function targetAt(x,y){
+  const els = document.elementsFromPoint(x,y);
+  for (const n of els){ if (n.id==='trash') return 'trash'; const t = n.closest && n.closest('[data-target]'); if (t) return t; }
+  return null;
+}
+function moveDrag(e){
+  if (!drag) return;
+  if (!drag.moved && Math.hypot(e.clientX-drag.x0, e.clientY-drag.y0) < 6) return;
+  if (!drag.moved){ drag.moved = true; drag.el.classList.add('dragging');
+    drag.ghost = document.createElement('div'); drag.ghost.className='ghost'; drag.ghost.textContent = drag.name; document.body.append(drag.ghost);
+    $('trash').classList.add('show'); }
+  drag.ghost.style.left = e.clientX+'px'; drag.ghost.style.top = e.clientY+'px';
+  const t = targetAt(e.clientX,e.clientY);
+  if (t !== drag.over){
+    if (drag.over && drag.over !== 'trash') drag.over.classList.remove('over');
+    $('trash').classList.toggle('over', t==='trash');
+    if (t && t !== 'trash') t.classList.add('over');
+    drag.over = t;
+  }
+  updateInsert(e.clientY);
+  const m = 60; if (e.clientY < m) scrollBy(0,-12); else if (e.clientY > innerHeight-m) scrollBy(0,12);
+}
+function updateInsert(y){
+  document.querySelectorAll('.insert').forEach(n=>n.remove());
+  const w = drag.over; drag.insertAt = null;
+  if (!w || w === 'trash' || w.dataset.target === 'pool') return;
+  const chips = [...w.querySelectorAll('.chip')].filter(c => c !== drag.el).map(c => c.getBoundingClientRect());
+  let idx = chips.filter(r => (r.top + r.bottom)/2 < y).length;
+  drag.insertAt = idx;
+  const wr = w.getBoundingClientRect();
+  let yy;
+  if (!chips.length) yy = wr.top + wr.height/2;
+  else if (idx === 0) yy = chips[0].top - 1;
+  else if (idx === chips.length) yy = chips[idx-1].bottom + 1;
+  else yy = (chips[idx-1].bottom + chips[idx].top)/2;
+  const left = +w.dataset.target % 2 === 0;
+  const line = document.createElement('div'); line.className = 'insert';
+  line.style.top = (yy - wr.top - 1) + 'px';
+  line.style.left = left ? '0' : '50%'; line.style.width = '50%';
+  w.append(line);
+}
+function cleanup(){
+  if (!drag) return;
+  drag.el.classList.remove('dragging'); drag.ghost && drag.ghost.remove();
+  if (drag.over && drag.over!=='trash') drag.over.classList.remove('over');
+  $('trash').classList.remove('show','over');
+  document.querySelectorAll('.insert').forEach(n=>n.remove());
+  drag.el.removeEventListener('pointermove', moveDrag); drag.el.removeEventListener('pointerup', endDrag); drag.el.removeEventListener('pointercancel', cancelDrag);
+}
+function cancelDrag(){ cleanup(); drag = null; }
+function listOf(where){ return where==='pool' ? state.unseated : state.tables[+where].guests; }
+function endDrag(){
+  if (!drag) return; const d = drag; cleanup(); drag = null;
+  if (!d.moved){ rename(d.where, d.idx, d.el); return; }
+  if (!d.over) return;
+  if (d.over === 'trash'){
+    listOf(d.where).splice(d.idx,1); markDirty(); render();
+    toast(`«${d.name}» удалён(а)`, undo); return;
+  }
+  const to = d.over.dataset.target;
+  const at = d.insertAt == null ? listOf(to).length : d.insertAt;
+  if (String(to) === String(d.where) && (to === 'pool' || at === d.idx)) return;
+  listOf(d.where).splice(d.idx,1); listOf(to).splice(at,0,d.name); markDirty(); render();
+}
+
+function inlineEdit(host, value, commit){
+  if (host.querySelector('input')) return;
+  const inp = document.createElement('input'); inp.value = value; inp.size = Math.max(value.length, 6);
+  host.textContent = ''; host.append(inp); inp.focus(); inp.select();
+  let done = false;
+  const finish = ok => { if (done) return; done = true; const v = inp.value.trim();
+    if (ok && v && v !== value){ commit(v); markDirty(); } render(); };
+  inp.addEventListener('input', () => inp.size = Math.max(inp.value.length, 6));
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') finish(true); else if (e.key === 'Escape') finish(false); });
+  inp.addEventListener('blur', () => finish(true));
+}
+function rename(where, idx, el){
+  if (readOnly) return;
+  const list = listOf(where);
+  inlineEdit(el, list[idx], v => { list[idx] = v; });
+}
+function renameTable(ti, el){
+  if (readOnly) return;
+  inlineEdit(el, state.tables[ti].name, v => { state.tables[ti].name = v; });
+}
+let toastTimer = null;
+function toast(msg, undo){
+  document.querySelectorAll('.toast').forEach(n => n.remove()); clearTimeout(toastTimer);
+  const t = document.createElement('div'); t.className = 'toast';
+  const span = document.createElement('span'); span.textContent = msg;
+  const b = document.createElement('button'); b.textContent = 'Вернуть';
+  b.onclick = () => { t.remove(); undo(); };
+  t.append(span, b); document.body.append(t);
+  toastTimer = setTimeout(() => t.remove(), 6000);
+}
+$('addGuest').onclick = () => { const i=$('newGuest'); const v=i.value.trim(); if(!v) return; state.unseated.push(v); i.value=''; markDirty(); render(); };
+$('newGuest').addEventListener('keydown', e=>{ if(e.key==='Enter') $('addGuest').click(); });
+$('addTable').onclick = () => { state.tables.push({name:`Стол ${state.tables.length+1}`, guests:[]}); markDirty(); render(); };
+$('print').onclick = () => window.print();
+$('reset').onclick = () => { state = structuredClone(initial); markDirty(); render(); toast('Вернул сохранённую версию', undo); };
+$('undo').onclick = undo; $('redo').onclick = redo;
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || !(e.ctrlKey || e.metaKey)) return;
+  const k = e.key.toLowerCase();
+  if ((k === 'z' || k === 'я') && !e.shiftKey){ e.preventDefault(); undo(); }
+  else if (((k === 'z' || k === 'я') && e.shiftKey) || k === 'y' || k === 'н'){ e.preventDefault(); redo(); }
+});
+
+/* persistence: publish a new version of this page with the state embedded */
+$('save').onclick = async () => {
+  if (!dirty) return;
+  const clean = SOURCE.replace(/(<script id="state" type="application\/json">)[\s\S]*?(<\/script>)/, (m,a,b)=> a + '\n' + JSON.stringify(state).replace(/</g,'\\u003c') + '\n' + b);
+  if (!artifactApi){
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([clean], {type:'text/html'}));
+    a.download = 'index.html'; a.click(); URL.revokeObjectURL(a.href);
+    $('status').textContent = 'скачан index.html — закоммить его в репо'; return;
+  }
+  $('save').disabled = true; $('status').textContent = 'сохраняю…';
+  try { await artifactApi.publish(clean); clearDraft(); }
+  catch(err){
+    if (err && (err.code==='not_writer' || err.code==='not_granted')){ readOnly = true; document.body.classList.add('readonly'); }
+    else if (err && err.code==='conflict'){ /* page reloads to the latest version */ }
+    else { $('status').textContent = 'не удалось сохранить, попробуй ещё раз'; $('save').disabled = false; return; }
+    renderStatus();
+  }
+};
+
+const SOURCE = (() => {
+  // snapshot of the page as authored, taken before render() touches the DOM
+  const root = document.documentElement.cloneNode(true);
+  root.querySelectorAll('script').forEach(n => { if (n.id !== 'state' && n.id !== 'app') n.remove(); });
+  root.querySelectorAll('style').forEach(n => { if (n.id !== 'css') n.remove(); });
+  root.querySelectorAll('link').forEach(n => { if (!/fonts\.googleapis/.test(n.href || '')) n.remove(); });
+  root.removeAttribute('data-theme'); root.removeAttribute('style');
+  return '<!doctype html>\n' + root.outerHTML;
+})();
+(async () => {
+  try { if (window.claude && claude.use){ artifactApi = await claude.use('artifact'); } } catch(e){}
+  renderStatus();
+})();
+
+render();
+</script></body></html>
