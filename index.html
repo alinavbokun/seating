@@ -59,6 +59,9 @@ main{padding:16px;max-width:1200px;margin:0 auto}
 .seat{position:absolute;width:9px;height:9px;border-radius:50%;background:var(--ink);transform:translate(-50%,-50%)}
 .chip{position:absolute;font-family:var(--hand);font-size:1.2rem;line-height:1.1;color:var(--ink);white-space:nowrap;cursor:grab;
   padding:1px 6px;border-radius:6px;user-select:none;-webkit-user-select:none;touch-action:none;background:transparent}
+.chip small{display:block;font-family:system-ui,-apple-system,sans-serif;font-size:.62em;color:var(--muted);line-height:1.15}
+.chip.l{text-align:right}
+.pool .chip small{display:inline;margin-left:.4em}
 .chip:hover{background:color-mix(in srgb,var(--ink) 8%,transparent)}
 .pool .chip{position:static;background:var(--chip);border:1.5px solid var(--ink-soft)}
 .ghost{position:fixed;z-index:100;pointer-events:none;font-family:var(--hand);font-size:1.35rem;color:var(--paper);background:var(--ink);
@@ -151,17 +154,20 @@ function renderStatus(){
   else { s.textContent = 'сохранено'; s.className='ctrl status ok'; b.disabled = true; }
 }
 
-const W = 420, CY = 125, R = 105;
+const R = 160, W = 2*R + 20, CY = R + 20;
 // guests sit on the outer half of the table: left column faces left, right column faces right
 function layout(n, i, left){
   const cx = left ? W - 10 - R : 10 + R;
-  const dy = n > 1 ? R*0.86*(-1 + 2*i/(n-1)) : 0;
+  const dy = n > 1 ? R*0.9*(-1 + 2*i/(n-1)) : 0;
   const dx = Math.sqrt(R*R - dy*dy);
   return {cx, px: left ? cx - dx : cx + dx, py: CY + dy};
 }
 function chip(name, where, idx){
   const el = document.createElement('div');
-  el.className = 'chip'; el.textContent = name; el.tabIndex = 0;
+  el.className = 'chip'; el.tabIndex = 0; el.dataset.name = name;
+  const m = name.match(/^(.*?)\s*\((.+)\)\s*$/);
+  if (m){ el.append(m[1]); const r = document.createElement('small'); r.textContent = m[2]; el.append(r); }
+  else el.textContent = name;
   el.dataset.where = where; el.dataset.idx = idx;
   el.addEventListener('pointerdown', startDrag);
   return el;
@@ -177,35 +183,44 @@ function render(){
   const grid = $('grid'); grid.innerHTML = '';
   state.tables.forEach((t,ti)=>{
     const wrap = document.createElement('div'); wrap.className='tablewrap'; wrap.dataset.target = ti;
-    const stage = document.createElement('div'); stage.className='stage';
+    const stage = document.createElement('div'); stage.className='stage'; stage.style.width = W+'px'; stage.style.height = (2*CY)+'px';
     const c = document.createElement('div'); c.className='circle';
     const tn = document.createElement('button'); tn.className='tname'; tn.textContent=t.name; tn.title='Нажми, чтобы переименовать';
     tn.addEventListener('click',()=>renameTable(ti, tn));
     const cnt = document.createElement('div'); cnt.className='cnt'; cnt.textContent = `${t.guests.length} чел.`;
     c.append(tn,cnt); stage.append(c);
     const left = ti % 2 === 0;
-    c.style.left = (layout(1,0,left).cx - R) + 'px';
+    c.style.left = (layout(1,0,left).cx - R) + 'px'; c.style.width = c.style.height = (2*R) + 'px';
     t.guests.forEach((g,gi)=>{
       const {px,py} = layout(t.guests.length, gi, left);
       const dot = document.createElement('div'); dot.className='seat'; dot.style.left=px+'px'; dot.style.top=py+'px';
       const ch = chip(g, ti, gi);
       ch.style.top = py+'px'; ch.style.transform = 'translateY(-50%)';
-      if (left) ch.style.right = (W-px+8)+'px'; else ch.style.left = (px+8)+'px';
+      if (left){ ch.style.right = (W-px+8)+'px'; ch.classList.add('l'); } else ch.style.left = (px+8)+'px';
       stage.append(dot, ch);
     });
     wrap.append(stage); grid.append(wrap);
   });
   fit(); renderStatus();
 }
-function fit(){ document.querySelectorAll('.tablewrap').forEach(w=>{ w.firstChild.style.transform = `scale(${w.clientWidth/420})`; }); }
+function fit(){ document.querySelectorAll('.tablewrap').forEach(w=>{
+  const st = w.firstChild; let x0 = 0, x1 = W, y0 = 0, y1 = 2*CY;
+  st.querySelectorAll('.chip').forEach(c=>{ const t = c.offsetTop - c.offsetHeight/2;
+    x0 = Math.min(x0, c.offsetLeft); x1 = Math.max(x1, c.offsetLeft + c.offsetWidth);
+    y0 = Math.min(y0, t); y1 = Math.max(y1, t + c.offsetHeight); });
+  const k = w.clientWidth / (x1 - x0);
+  st.style.transform = `scale(${k}) translate(${-x0}px,${-y0}px)`;
+  w.style.aspectRatio = 'auto'; w.style.height = ((y1 - y0) * k) + 'px';
+}); }
 window.addEventListener('resize', fit);
+try { document.fonts.ready.then(fit); document.fonts.addEventListener('loadingdone', fit); } catch(e){}
 
 /* drag via pointer events (mouse + touch) */
 let drag = null;
 function startDrag(e){
   if (readOnly || e.button > 0 || e.target.tagName === 'INPUT') return;
   const el = e.currentTarget;
-  drag = {el, where: el.dataset.where, idx: +el.dataset.idx, name: el.textContent, x0:e.clientX, y0:e.clientY, moved:false, ghost:null, over:null};
+  drag = {el, where: el.dataset.where, idx: +el.dataset.idx, name: el.dataset.name, x0:e.clientX, y0:e.clientY, moved:false, ghost:null, over:null};
   el.setPointerCapture(e.pointerId);
   el.addEventListener('pointermove', moveDrag); el.addEventListener('pointerup', endDrag); el.addEventListener('pointercancel', cancelDrag);
 }
